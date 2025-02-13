@@ -1,0 +1,119 @@
+name: Check and Update yt-dlp and spotdl versions
+
+on:
+  schedule:
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-versions:
+    runs-on: ubuntu-latest
+    outputs:
+      updated_flag: ${{ steps.update_requirements.outputs.updated_flag }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.PAT }}
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Get latest yt-dlp and spotdl versions
+      id: get_latest_versions
+      run: |
+        pip install yt-dlp spotdl
+        latest_ytdlp=$(yt-dlp --version)
+        latest_spotdl=$(spotdl --version)
+        echo "Latest yt-dlp version: $latest_ytdlp"
+        echo "Latest spotdl version: $latest_spotdl"
+        echo "latest_ytdlp=$latest_ytdlp" >> $GITHUB_ENV
+        echo "latest_spotdl=$latest_spotdl" >> $GITHUB_ENV
+
+    - name: Extract versions from requirements.txt
+      id: extract_versions
+      run: |
+        current_ytdlp=$(grep -oP "(?<=yt_dlp\[default\]==)\d+(\.\d+)+" requirements.txt || echo "0.0")
+        current_spotdl=$(grep -oP "(?<=spotdl==)\d+(\.\d+)+" requirements.txt || echo "0.0")
+        echo "Version in requirements.txt - yt-dlp: $current_ytdlp, spotdl: $current_spotdl"
+        echo "current_ytdlp=$current_ytdlp" >> $GITHUB_ENV
+        echo "current_spotdl=$current_spotdl" >> $GITHUB_ENV
+
+    - name: Update yt-dlp in requirements.txt if new version available
+      id: update_ytdlp
+      run: |
+        if [ "${{ env.latest_ytdlp }}" != "${{ env.current_ytdlp }}" ]; then
+          sed -i "s/^yt_dlp.*/yt_dlp[default]==${{ env.latest_ytdlp }}/" requirements.txt
+          git config --global user.email "updater@spotspot"
+          git config --global user.name "AutoUpdater"
+          git commit -m "Update yt-dlp to ${{ env.latest_ytdlp }}" requirements.txt
+          git push
+          echo "updated_flag=true" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Update spotdl in requirements.txt if new version available
+      id: update_spotdl
+      run: |
+        if [ "${{ env.latest_spotdl }}" != "${{ env.current_spotdl }}" ]; then
+          sed -i "s/^spotdl.*/spotdl==${{ env.latest_spotdl }}/" requirements.txt
+          git config --global user.email "updater@spotspot"
+          git config --global user.name "AutoUpdater"
+          git commit -m "Update spotdl to ${{ env.latest_spotdl }}" requirements.txt
+          git push
+          echo "updated_flag=true" >> $GITHUB_OUTPUT
+        fi
+
+  generate-release:
+    runs-on: ubuntu-latest
+    needs: check-versions
+    if: ${{ needs.check-versions.outputs.updated_flag == 'true' }}
+
+    env:
+      GH_TOKEN: ${{ secrets.PAT }}
+
+    steps:    
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.PAT }}
+
+    - name: Pull latest changes
+      run: git pull origin main
+    
+    - name: Fetch and list tags
+      run: |
+        git fetch --tags
+        echo "Tags:"
+        git tag --list
+
+    - name: Increment release
+      id: increment_release
+      run: |
+        latest_tag=$(git tag --list | grep -v 'testing' | sed 's/^v//' | sort -V | tail -n 1 || echo "0.0.0")
+        major=$(echo $latest_tag | cut -d. -f1)
+        minor=$(echo $latest_tag | cut -d. -f2)
+        patch=$(echo $latest_tag | cut -d. -f3)
+        new_patch=$((patch + 1))
+        new_tag="v${major}.${minor}.${new_patch}"
+
+        echo "CURRENT_RELEASE=$latest_tag" >> $GITHUB_ENV
+        echo "NEW_RELEASE=$new_tag" >> $GITHUB_ENV
+        echo "Current release: $latest_tag"
+        echo "New release: $new_tag"
+
+    - name: Create new Git tag
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git tag -a ${{ env.NEW_RELEASE }} -m "Release version ${{ env.NEW_RELEASE }}"
+        git push origin ${{ env.NEW_RELEASE }}
+
+    - name: Create release
+      run: |
+        gh release create "${{ env.NEW_RELEASE }}" \
+            --repo="${GITHUB_REPOSITORY}" \
+            --title="${{ env.NEW_RELEASE }}" \
+            --generate-notes
