@@ -1,6 +1,8 @@
 name: Publish to Testing Branch
 
 on:
+  workflow_dispatch:
+  
   push:
     branches:
       - 'testing'
