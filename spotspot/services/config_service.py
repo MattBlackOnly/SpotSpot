@@ -141,10 +141,10 @@ class ConfigService:
         self.use_cache_file = os.getenv("USE_CACHE_FILE", "False").lower() == "true"
         logging.info(f"Use Cache File: {self.use_cache_file}")
 
-        self.audio_providers = os.getenv("AUDIO_PROVIDERS", "youtube,youtube-music,slider-kz,soundcloud,bandcamp,piped")
+        self.audio_providers = os.getenv("AUDIO_PROVIDERS", "youtube,youtube-music,slider-kz,soundcloud,bandcamp,piped").split(",")
         logging.info(f"Audio Providers: {self.audio_providers}")
 
-        self.lyrics_providers = os.getenv("LYRICS_PROVIDERS", "genius,azlyrics,musixmatch")
+        self.lyrics_providers = os.getenv("LYRICS_PROVIDERS", "genius,azlyrics,musixmatch").split(",")
         logging.info(f"Lyrics Providers: {self.lyrics_providers}")
 
         self.genious_token = os.getenv("GENIOUS_TOKEN", "alXXDbPZtK1m2RrZ8I4k2Hn8Ahsd0Gh_o076HYvcdlBvmc0ULL1H8Z8xRlew5qaG")
@@ -171,7 +171,7 @@ class ConfigService:
         self.ffmpeg = os.getenv("FFMPEG", "ffmpeg")
         logging.info(f"FFmpeg: {self.ffmpeg}")
 
-        self.bitrate = os.getenv("BITRATE", "auto")
+        self.bitrate = os.getenv("BITRATE", None)
         logging.info(f"Bitrate: {self.bitrate}")
 
         self.ffmpeg_args = os.getenv("FFMPEG_ARGS", None)
