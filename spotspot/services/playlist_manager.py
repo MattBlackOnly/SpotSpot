@@ -13,7 +13,7 @@ class PlaylistManager:
     def generate_m3u_playlist(self):
         try:
             folder_path = self.config.absolute_server_path
-            logging.info("Generating M3U playlist for folder: {folder_path}")
+            logging.info(f"Generating M3U playlist for folder: {folder_path}")
 
             # Ensure playlist directory exists
             os.makedirs(self.config.m3u_playlist_path, exist_ok=True)
