@@ -24,16 +24,16 @@ class ConfigService:
         self.ffmpeg_location = "D:\\" if os_system == "Windows" else "/usr/bin/ffmpeg"
         logging.info(f"FFmpeg location set to: {self.ffmpeg_location}")
 
-        self.track_output = os.getenv("TRACK_OUTPUT", "{artist} - {title}.{output-ext}")
+        self.track_output = os.getenv("TRACK_OUTPUT", "/data/media/music/singles/{artist} - {title}.{output-ext}")
         logging.info(f"Track Output: {self.track_output}")
 
-        self.album_output = os.getenv("ALBUM_OUTPUT", "{artist}/{album}/{artist} - {title}.{output-ext}")
+        self.album_output = os.getenv("ALBUM_OUTPUT", "/data/media/music/{artist}/{album} - ({year})/{artist} - {title}.{output-ext}")
         logging.info(f"Album Output: {self.album_output}")
 
-        self.playlist_output = os.getenv("PLAYLIST_OUTPUT", "{list-name}/{artist} - {title}.{output-ext}")
+        self.playlist_output = os.getenv("PLAYLIST_OUTPUT", "/data/media/music/{list-name}/{artist} - {title}.{output-ext}")
         logging.info(f"Playlist Output: {self.playlist_output}")
 
-        self.artist_output = os.getenv("ARTIST_OUTPUT", "{artist}/{album}/{artist} - {title}.{output-ext}")
+        self.artist_output = os.getenv("ARTIST_OUTPUT", "/data/media/music/{artist}/{album} - ({year})/{artist} - {title}.{output-ext}")
         logging.info(f"Artist Output: {self.artist_output}")
 
         self.trigger_jellyfin_scan = os.getenv("TRIGGER_JELLYFIN_SCAN", "True")
@@ -53,6 +53,9 @@ class ConfigService:
 
         self.plex_token = os.getenv("PLEX_TOKEN", "")
         logging.info(f"Plex Token entered: {self.plex_token != ''}")
+
+        self.plex_library_section_id = int(os.getenv("PLEX_LIBRARY_SECTION_ID", "1"))
+        logging.info(f"Plex Library Section ID: {self.plex_library_section_id}")
 
         self.plex_library_name = os.getenv("PLEX_LIBRARY_NAME", "Music")
         logging.info(f"Plex Library Name: {self.plex_library_name}")

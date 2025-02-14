@@ -53,7 +53,7 @@ class DownloadService:
             try:
                 logging.info(f"Downloading: {url}")
 
-                command = ["spotdl", "--output", f"/data/{download_path}", url]
+                command = ["spotdl", "--output", f"{download_path}", url]
                 logging.info(f"SpotDL command: {command}")
 
                 self.spodtdl_subprocess = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
