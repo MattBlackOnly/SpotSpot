@@ -36,6 +36,30 @@ services:
 ```
 
 
+## 🎵 Playlist Configuration  
+
+For playlists, an **absolute file path** is required in the `.m3u` playlist file. This ensures compatibility with media servers like **Plex**, which require absolute paths for proper playback.  
+
+### ✅ Key Setup Requirements:  
+1. **Container Path Mapping:**  
+   - The `/data` directory should be **consistently** mapped in the container:  
+     ```yml
+     /data:/data
+     ```
+   - This ensures that all media files are accessible using the same path inside and outside the container.  
+
+2. **Output Path Configuration:**  
+   - Ensure the following output paths are correctly set:  
+     - `TRACK_OUTPUT`  
+     - `ALBUM_OUTPUT`  
+     - `PLAYLIST_OUTPUT`  
+     - `ARTIST_OUTPUT`  
+   - These paths should align with your actual directory structure.  
+
+3. **Adjust Paths as Needed:**  
+   - If your media files are stored elsewhere, update the paths accordingly to avoid broken playlist links.  
+
+
 ## Configuration via Environment Variables
 
 Customize the behavior of **SpotSpot** and **SpotDL** by setting the following environment variables in your `docker-compose.yml` file:
@@ -45,10 +69,10 @@ environment:
   # General Configuration
   - CONFIG_PATH=/home/appuser/.spotdl/config.json    # Path where the config file will be saved (Windows default: D:/config.json, Linux default: /home/appuser/.spotdl/config.json)
   - FFMPEG_LOCATION= /usr/bin/ffmpeg                 # Location of ffmpeg executable (Windows default: D:/, Linux default: /usr/bin/ffmpeg)
-  - TRACK_OUTPUT="/data/media/music/singles/{artist} - {title}.{output-ext}"                      # Format for saving individual tracks (default: {artist} - {title}.{output-ext})
-  - ALBUM_OUTPUT="/data/media/music/{artist}/{album} - ({year})/{artist} - {title}.{output-ext}"  # Format for saving albums (default: {artist}/{album}/{artist} - {title}.{output-ext})
-  - PLAYLIST_OUTPUT="/data/media/music/{list-name}/{artist} - {title}.{output-ext}"               # Format for saving playlists (default: {list-name}/{artist} - {title}.{output-ext})
-  - ARTIST_OUTPUT="/data/media/music/{artist}/{album} - ({year})/{artist} - {title}.{output-ext}" # Format for saving artist albums (default: {artist}/{album}/{artist} - {title}.{output-ext})
+  - TRACK_OUTPUT=/data/media/music/singles/{artist} - {title}.{output-ext}                      # Format for saving individual tracks (default: {artist} - {title}.{output-ext})
+  - ALBUM_OUTPUT=/data/media/music/{artist}/{album} - ({year})/{artist} - {title}.{output-ext}  # Format for saving albums (default: {artist}/{album}/{artist} - {title}.{output-ext})
+  - PLAYLIST_OUTPUT=/data/media/music/{list-name}/{artist} - {title}.{output-ext}               # Format for saving playlists (default: {list-name}/{artist} - {title}.{output-ext})
+  - ARTIST_OUTPUT=/data/media/music/{artist}/{album} - ({year})/{artist} - {title}.{output-ext} # Format for saving artist albums (default: {artist}/{album}/{artist} - {title}.{output-ext})
 
   # Jellyfin Configuration
   - TRIGGER_JELLYFIN_SCAN=True                       # Trigger Jellyfin scan after download (default: True)
@@ -65,8 +89,8 @@ environment:
   # Playlist Configuration
   - GENERATE_M3U_PLAYLIST=True                       # Generate M3U playlist after download (default: True)
   - M3U_PLAYLIST_NAME=spotify_singles                # Name of the M3U playlist (default: spotify_singles)
-  - M3U_PLAYLIST_PATH="/data/media/music/playlists"  # Path for M3U playlist (default: /data/media/music/playlists)
-  - RELATIVE_SERVER_PATH="/data/media/music/singles" # Path for media files (default: /data/media/music/singles)
+  - M3U_PLAYLIST_PATH=/data/media/music/playlists    # Path for M3U playlist (default: /data/media/music/playlists)
+  - ABSOLUTE_SERVER_PATH=/data/media/music/singles   # Path for media files (default: /data/media/music/singles)
 
   # SpotDL Specific Configuration
   - CLIENT_ID=5f573c9620494bae87890c0f08a60293       # Client ID for SpotDL (default: 5f573c9620494bae87890c0f08a60293)
@@ -74,13 +98,13 @@ environment:
   - AUTH_TOKEN=""                                    # Authentication token for SpotDL (default: None)
   - USER_AUTH=False                                  # Enable user authentication (default: False)
   - HEADLESS=False                                   # Run in headless mode (default: False)
-  - CACHE_PATH=/home/appuser/.spotdl/.spotipy      # Cache path for SpotDL (default: /home/appuser/.spotdl/.spotipy)
+  - CACHE_PATH=/home/appuser/.spotdl/.spotipy        # Cache path for SpotDL (default: /home/appuser/.spotdl/.spotipy)
   - NO_CACHE=True                                    # Disable cache (default: True)
-  - OUTPUT="{artists} - {title}.{output-ext}"        # Output format for downloaded tracks (default: {artists} - {title}.{output-ext})
-  - FORMAT=mp3                                     # Format for output file (default: mp3)
+  - OUTPUT={artists} - {title}.{output-ext}          # Output format for downloaded tracks (default: {artists} - {title}.{output-ext})
+  - FORMAT=mp3                                       # Format for output file (default: mp3)
   - PRELOAD=False                                    # Preload tracks (default: False)
   - PORT=8800                                        # Port for SpotDL service (default: 8800)
-  - HOST=localhost                                 # Host for SpotDL service (default: localhost)
+  - HOST=localhost                                   # Host for SpotDL service (default: localhost)
   - KEEP_ALIVE=False                                 # Keep the server alive (default: False)
   - ENABLE_TLS=False                                 # Enable TLS encryption (default: False)
   - PROXY=""                                         # Proxy for SpotDL (default: None)
@@ -100,7 +124,7 @@ environment:
   - OVERWRITE="skip"                                 # Overwrite behavior (default: skip)
   - SEARCH_QUERY=""                                  # Search query for track (default: None)
   - FFmpeg_ARGS=""                                   # Custom arguments for ffmpeg (default: None)
-  - BITRATE="auto"                                       # Set bitrate for downloads (default: None)
+  - BITRATE=""                                       # Set bitrate for downloads (default: None)
 
   # Session and File Management
   - SAVE_FILE=""                                     # Save file path (default: None)

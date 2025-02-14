@@ -12,7 +12,7 @@ class PlaylistManager:
 
     def generate_m3u_playlist(self):
         try:
-            folder_path = self.config.relative_server_path
+            folder_path = self.config.absolute_server_path
             logging.info("Generating M3U playlist for immediate /data folder")
 
             # Ensure playlist directory exists
@@ -24,8 +24,7 @@ class PlaylistManager:
                 for file in os.listdir(folder_path):
                     file_path = os.path.join(folder_path, file)
                     if os.path.isfile(file_path) and any(file.endswith(ext.lower()) for ext in self.config.supported_formats):
-                        relative_path = os.path.join(self.config.relative_server_path, file)
-                        m3u_file.write(f"{relative_path}\n")
+                        m3u_file.write(f"{file_path}\n")
 
             logging.info(f"M3U playlist generated at: {m3u_file_path}")
 
@@ -59,16 +58,16 @@ class PlaylistManager:
 
     def import_playlist_to_plex(self):
         try:
-            m3u_file_path = os.path.join(self.config.m3u_playlist_path, f"{self.config.m3u_playlist_name}.m3u")
-            logging.info(f"Playlist Path: {m3u_file_path}")
+            plex_m3u_file_path = os.path.join(self.config.m3u_playlist_path, f"{self.config.m3u_playlist_name}.m3u")
+            logging.info(f"Plex Playlist Path: {plex_m3u_file_path}")
 
-            url = f"{self.config.plex_address}/playlists/upload?sectionID={self.config.plex_library_section_id}&path={m3u_file_path}&X-Plex-Token={self.config.plex_token}"
+            url = f"{self.config.plex_address}/playlists/upload?sectionID={self.config.plex_library_section_id}&path={plex_m3u_file_path}&X-Plex-Token={self.config.plex_token}"
 
             response = requests.post(url)
             if response.status_code == 200:
-                logging.info(f"Playlist Imported Successfully: {m3u_file_path}")
+                logging.info(f"Plex Playlist Imported Successfully: {plex_m3u_file_path}")
             else:
-                logging.error(f"Playlist Failed to Import: {m3u_file_path}. Status Code: {str(response.status_code)}")
+                logging.error(f"Plex Playlist Failed to Import: {plex_m3u_file_path}. Status Code: {str(response.status_code)}")
 
         except Exception as e:
             logging.error(f"Plex Playlist Import Error: {str(e)}")
