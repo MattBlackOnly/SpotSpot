@@ -85,8 +85,8 @@ class PlaylistManager:
             logging.info("M3U Playlist Generation started...")
             self.generate_m3u_playlist()
 
-        # Refresh Library to pick up playlist
-        if self.config.trigger_jellyfin_scan.lower() == "true":
-            self.refresh_jellyfin_library()
-        if self.config.trigger_plex_scan.lower() == "true":
-            self.import_playlist_to_plex()
+            # Refresh Library to pick up playlist
+            if self.config.trigger_jellyfin_scan.lower() == "true":
+                self.refresh_jellyfin_library()
+            if self.config.trigger_plex_scan.lower() == "true":
+                self.import_playlist_to_plex()
