@@ -40,8 +40,12 @@ class SpotSpotWebApp:
             return render_template("status.html")
 
         @self.socketio.on("search")
-        def handle_search(query):
-            parsed_results = self.spotify_services.perform_spotify_search(query)
+        def handle_search(query_req):
+            if not query_req.get("query"):
+                self.socketio.emit("toast", {"title": "Blank Search Query", "body": "Please enter search request"})
+                parsed_results = {}
+            else:
+                parsed_results = self.spotify_services.perform_spotify_search(query_req)
             self.socketio.emit("search_results", {"results": parsed_results})
 
         @self.socketio.on("download_item")

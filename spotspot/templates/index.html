@@ -37,9 +37,11 @@
                     aria-label="Search..." aria-describedby="search-input">
                 <button id="search-button" type="button" class="btn btn-primary">
                     Search for Track
+                    <span id="spinner-border" class="spinner-border spinner-border-sm ms-2" role="status"
+                        aria-hidden="true" style="display: none;"></span>
                 </button>
-                <button class="btn btn-primary dropdown-toggle dropdown-toggle-split rounded-end" type="button"
-                    data-bs-toggle="dropdown" aria-expanded="false">
+                <button id="search-dropdown" class="btn btn-primary dropdown-toggle dropdown-toggle-split rounded-end"
+                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <span class="visually-hidden">Toggle Dropdown</span>
                 </button>
                 <ul class="dropdown-menu">
@@ -49,8 +51,6 @@
                     <li><a class="dropdown-item" href="#" onclick="updateSelection('Artist')">Artist</a></li>
                     <li><a class="dropdown-item" href="#" onclick="updateSelection('All')">All</a></li>
                 </ul>
-                <span id="spinner-border" class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true"
-                    style="display: none;"></span>
             </div>
         </section>
 
@@ -124,7 +124,7 @@
     <div aria-live="polite" aria-atomic="true" class="position-relative">
         <div class="toast-container position-fixed top-0 end-0 p-3">
             <!-- Toast -->
-            <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+            <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="750">
                 <div class="toast-header">
                     <strong class="me-auto" id="toast-title">Toast</strong>
                     <small id="toast-time">Now</small>

@@ -2,18 +2,20 @@ const socket = io();
 const searchButton = document.getElementById('search-button');
 const spinnerBorder = document.getElementById('spinner-border');
 const searchInput = document.getElementById('search-input');
+const searchDropdown = document.getElementById('search-dropdown');
 let selectedType = "track";
 
 function changeUI(reqState) {
     if (reqState === "busy") {
         searchInput.disabled = true;
         searchButton.disabled = true;
+        searchDropdown.disabled = true;
         spinnerBorder.style.display = 'inline-block';
     } else {
         spinnerBorder.style.display = 'none';
-        searchInput.value = '';
         searchInput.disabled = false;
         searchButton.disabled = false;
+        searchDropdown.disabled = false;
     }
 }
 
@@ -23,13 +25,8 @@ function updateSelection(option) {
 }
 
 function initiateSearch() {
+    changeUI("busy");
     const searchText = searchInput.value;
-
-    if (!searchText.trim()) {
-        alert('The search text is empty...');
-        return;
-    }
-
     socket.emit('search', { query: searchText, type: selectedType });
 }
 
@@ -53,25 +50,25 @@ function populateTemplate(type, data) {
     const downloadButton = clone.querySelector('.download');
 
     if (type === 'track') {
-        clone.querySelector('.track-img').src = data.image || 'default-image.jpg';
+        clone.querySelector('.track-img').src = data.image || 'https://picsum.photos/300';
         clone.querySelector('.name').textContent = data.name;
         clone.querySelector('.artist').textContent = data.artist;
         clone.querySelector('.download').href = data.url;
         clone.querySelector('.download').setAttribute('data-url', data.url);
     } else if (type === 'album') {
-        clone.querySelector('.album-img').src = data.image || 'default-image.jpg';
+        clone.querySelector('.album-img').src = data.image || 'https://picsum.photos/300';
         clone.querySelector('.name').textContent = data.name;
         clone.querySelector('.artist').textContent = data.artist;
         clone.querySelector('.download').href = data.url;
         clone.querySelector('.download').setAttribute('data-url', data.url);
     } else if (type === 'artist') {
-        clone.querySelector('.artist-img').src = data.image || 'default-image.jpg';
+        clone.querySelector('.artist-img').src = data.image || 'https://picsum.photos/300';
         clone.querySelector('.name').textContent = data.name;
         clone.querySelector('.followers').textContent = `${data.followers} Followers`;
         clone.querySelector('.download').href = data.url;
         clone.querySelector('.download').setAttribute('data-url', data.url);
     } else if (type === 'playlist') {
-        clone.querySelector('.playlist-img').src = data.image || 'default-image.jpg';
+        clone.querySelector('.playlist-img').src = data.image || 'https://picsum.photos/300';
         clone.querySelector('.name').textContent = data.name;
         clone.querySelector('.owner').textContent = data.owner;
         clone.querySelector('.download').href = data.url;

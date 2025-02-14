@@ -1,13 +1,13 @@
 ![Logo](spotspot/static/spotspot.png)
 
 
-**SpotSpot** is a simple Spotify downloader.
+**SpotSpot** is a simple tool for searching Spotify and downloading via YouTube (spotDL/yt-dlp).
 
 
 ## Features:
 
 - **Full SpotDL Support:** Download Albums, Tracks, Playlists, and Artists.
-- **SpotDL Config:** Fully customizable via SpotDL Environmental Variables.
+- **Playlist Generator:** Automatically generate playlists.
 - **Custom Filepaths:**  Set your download and config directories in the settings.
 - **Mobile Optimized:**  Designed for small screens to enhance usability on mobile devices.
 
@@ -89,7 +89,7 @@ environment:
   - LOG_LEVEL="DEBUG"                                # Log level for SpotDL (default: DEBUG)
   - MAX_RETRIES=3                                    # Max retries for SpotDL requests (default: 3)
   - USE_CACHE_FILE="False"                           # Use cache file (default: False)
-  - AUDIO_PROVIDERS="youtube-music"                  # Audio providers for SpotDL (default: youtube-music)
+  - AUDIO_PROVIDERS="youtube,youtube-music,slider-kz,soundcloud,bandcamp,piped" # Audio providers for SpotDL (default: youtube,youtube-music,slider-kz,soundcloud,bandcamp,piped)
   - LYRIC_PROVIDERS="genius,azlyrics,musixmatch"     # Lyrics providers (default: genius, azlyrics, musixmatch)
   - GENIUS_TOKEN="alXXDbPZtK1m2RrZ8I4k2Hn8Ahsd0Gh_o076HYvcdlBvmc0ULL1H8Z8xRlew5qaG"  # Genius API token
   - PLAYLIST_NUMBERING="False"                       # Enable playlist numbering (default: False)
@@ -99,7 +99,7 @@ environment:
   - OVERWRITE="skip"                                 # Overwrite behavior (default: skip)
   - SEARCH_QUERY=""                                  # Search query for track (default: None)
   - FFmpeg_ARGS=""                                   # Custom arguments for ffmpeg (default: None)
-  - BITRATE=""                                       # Set bitrate for downloads (default: None)
+  - BITRATE="auto"                                       # Set bitrate for downloads (default: None)
 
   # Session and File Management
   - SAVE_FILE=""                                     # Save file path (default: None)
