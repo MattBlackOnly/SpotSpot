@@ -89,7 +89,7 @@ environment:
   - LOG_LEVEL="DEBUG"                                # Log level for SpotDL (default: DEBUG)
   - MAX_RETRIES=3                                    # Max retries for SpotDL requests (default: 3)
   - USE_CACHE_FILE="False"                           # Use cache file (default: False)
-  - AUDIO_PROVIDERS="youtube,youtube-music,slider-kz,soundcloud,bandcamp,piped" # Audio providers for SpotDL (default: youtube,youtube-music,slider-kz,soundcloud,bandcamp,piped)
+  - AUDIO_PROVIDERS="youtube-music"                  # Audio providers for SpotDL (default: youtube-music)
   - LYRIC_PROVIDERS="genius,azlyrics,musixmatch"     # Lyrics providers (default: genius, azlyrics, musixmatch)
   - GENIUS_TOKEN="alXXDbPZtK1m2RrZ8I4k2Hn8Ahsd0Gh_o076HYvcdlBvmc0ULL1H8Z8xRlew5qaG"  # Genius API token
   - PLAYLIST_NUMBERING="False"                       # Enable playlist numbering (default: False)
