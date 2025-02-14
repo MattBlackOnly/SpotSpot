@@ -54,6 +54,8 @@ For playlists, an **absolute file path** is required in the `.m3u` playlist file
      - `ALBUM_OUTPUT`  
      - `PLAYLIST_OUTPUT`  
      - `ARTIST_OUTPUT`  
+     - `ABSOLUTE_SERVER_PATH`
+     - `M3U_PLAYLIST_PATH`
    - These paths should align with your actual directory structure.  
 
 3. **Adjust Paths as Needed:**  
