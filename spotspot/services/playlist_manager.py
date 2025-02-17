@@ -19,7 +19,7 @@ class PlaylistManager:
             os.makedirs(self.config.m3u_playlist_path, exist_ok=True)
 
             m3u_file_path = os.path.join(self.config.m3u_playlist_path, f"{self.config.m3u_playlist_name}.m3u")
-            logging.info("M3U playlist file: {m3u_file_path}")
+            logging.info(f"M3U playlist file: {m3u_file_path}")
 
             with open(m3u_file_path, "w") as m3u_file:
                 for file in os.listdir(folder_path):
