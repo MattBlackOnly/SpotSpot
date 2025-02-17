@@ -8,8 +8,6 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 class SpotifyService:
     def __init__(self, config):
         self.config = config
-        client_credentials_manager = SpotifyClientCredentials(client_id=self.config.client_id, client_secret=self.config.client_secret)
-        self.sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
     def perform_spotify_search(self, search_req):
         try:
@@ -19,6 +17,9 @@ class SpotifyService:
             search_type = "album,artist,playlist,track" if query_type == "all" else query_type
 
             logging.info(f"Search query: {query}, Type: {search_type}")
+            client_credentials_manager = SpotifyClientCredentials(client_id=self.config.client_id, client_secret=self.config.client_secret)
+            self.sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+
             results = self.sp.search(q=query, limit=self.config.search_limit, type=search_type)
             parsed_results = self.parse_spotify_data(results)
 
