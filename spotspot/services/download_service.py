@@ -1,4 +1,4 @@
-import os
+import sys
 import logging
 import subprocess
 
@@ -57,11 +57,25 @@ class DownloadService:
                 logging.info(f"SpotDL command: {command}")
 
                 self.spodtdl_subprocess = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-                stdout, stderr = self.spodtdl_subprocess.communicate()
 
-                if self.config.extra_logging.lower() == "true":
-                    logging.info(f"Extra Logging: {stdout=}")
-                    logging.info(f"Extra Logging: {stderr=}")
+                if self.config.extra_logging.lower() == "false":
+                    stdout, stderr = self.spodtdl_subprocess.communicate()
+                else:
+                    while True and self.config.extra_logging.lower() == "true":
+                        stdout_line = self.spodtdl_subprocess.stdout.readline()
+                        stderr_line = self.spodtdl_subprocess.stderr.readline()
+
+                        if stdout_line:
+                            logging.info(f"SpotDL Output: {stdout_line.strip()}")
+                            sys.stdout.flush()
+
+                        if stderr_line:
+                            logging.error(f"SpotDL Error Log: {stderr_line.strip()}")
+                            sys.stderr.flush()
+
+                        if stdout_line == "" and stderr_line == "" and self.spodtdl_subprocess.poll() is not None:
+                            logging.info(f"No more SpotDL Logs available")
+                            break
 
                 if download_info["status"] == "Cancelled":
                     self.download_queue.task_done()
