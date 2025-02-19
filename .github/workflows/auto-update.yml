@@ -9,7 +9,7 @@ jobs:
   check-versions:
     runs-on: ubuntu-latest
     outputs:
-      updated_flag: ${{ steps.update_requirements.outputs.updated_flag }}
+      updated_flag: ${{ steps.check_flags.outputs.updated_flag }}
 
     steps:
     - name: Checkout code
@@ -52,6 +52,9 @@ jobs:
           git commit -m "Update yt-dlp to ${{ env.latest_ytdlp }}" requirements.txt
           git push
           echo "updated_flag=true" >> $GITHUB_OUTPUT
+          echo "yt_dlp_updated_flag=true" >> $GITHUB_ENV
+        else
+          echo "yt_dlp_updated_flag=false" >> $GITHUB_ENV
         fi
 
     - name: Update spotdl in requirements.txt if new version available
@@ -63,7 +66,18 @@ jobs:
           git config --global user.name "AutoUpdater"
           git commit -m "Update spotdl to ${{ env.latest_spotdl }}" requirements.txt
           git push
+          echo "spotdl_updated_flag=true" >> $GITHUB_ENV
+        else
+          echo "spotdl_updated_flag=false" >> $GITHUB_ENV
+        fi
+
+    - name: Check if release is needed
+      id: check_flags
+      run: |
+        if [ "${{ env.yt_dlp_updated_flag }}" == "true" ] || [ "${{ env.spotdl_updated_flag }}" == "true" ]; then
           echo "updated_flag=true" >> $GITHUB_OUTPUT
+        else
+          echo "updated_flag=false" >> $GITHUB_OUTPUT
         fi
 
   generate-release:
