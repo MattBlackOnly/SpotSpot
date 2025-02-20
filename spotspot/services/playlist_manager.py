@@ -1,6 +1,7 @@
 import os
-import requests
 import logging
+import requests
+import threading
 from plexapi.server import PlexServer
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -75,6 +76,7 @@ class PlaylistManager:
 
     def import_playlist_to_plex(self):
         try:
+            logging.info(f"Starting Plex Playlist Import")
             plex_m3u_file_path = os.path.join(self.config.m3u_playlist_path, f"{self.config.m3u_playlist_name}.m3u")
             logging.info(f"Plex Playlist Path: {plex_m3u_file_path}")
 
@@ -105,4 +107,5 @@ class PlaylistManager:
             if self.config.trigger_jellyfin_scan.lower() == "true":
                 self.refresh_jellyfin_library()
             if self.config.trigger_plex_scan.lower() == "true":
-                self.import_playlist_to_plex()
+                logging.info(f"Delaying Plex Playlist Import for {self.config.plex_playlist_import_delay} seconds")
+                threading.Timer(self.config.plex_playlist_import_delay, self.import_playlist_to_plex).start()

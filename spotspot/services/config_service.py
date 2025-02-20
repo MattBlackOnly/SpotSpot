@@ -60,6 +60,9 @@ class ConfigService:
         self.plex_library_name = os.getenv("PLEX_LIBRARY_NAME", "Music")
         logging.info(f"Plex Library Name: {self.plex_library_name}")
 
+        self.plex_playlist_import_delay = float(os.getenv("PLEX_PLAYLIST_IMPORT_DELAY", "180"))
+        logging.info(f"Plex Playlist Import Delay: {self.plex_playlist_import_delay}")
+
         self.generate_m3u_playlist = os.getenv("GENERATE_M3U_PLAYLIST", "True")
         logging.info(f"Generate M3U Playlist: {self.generate_m3u_playlist}")
 

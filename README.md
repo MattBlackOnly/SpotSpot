@@ -87,6 +87,7 @@ environment:
   - PLEX_TOKEN=""                                    # Plex token (default: None)
   - PLEX_LIBRARY_NAME=Music                          # Plex library name (default: Music)
   - PLEX_SECTION_ID=1                                # Plex section ID (default: 1)
+  - PLEX_PLAYLIST_IMPORT_DELAY=180                   # Plex Playlist Import Delay (default: 180 seconds)
 
   # Playlist Configuration
   - GENERATE_M3U_PLAYLIST=True                       # Generate M3U playlist after download (default: True)
