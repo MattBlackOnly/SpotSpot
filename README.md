@@ -92,6 +92,7 @@ environment:
   - GENERATE_M3U_PLAYLIST=True                       # Generate M3U playlist after download (default: True)
   - M3U_PLAYLIST_NAME=spotify_singles                # Name of the M3U playlist (default: spotify_singles)
   - M3U_PLAYLIST_PATH=/data/media/music/playlists    # Path for M3U playlist (default: /data/media/music/playlists)
+  - M3U_PLAYLIST_SORT_ORDER=date_desc                # Playlist order (default: date_desc)
   - ABSOLUTE_SERVER_PATH=/data/media/music/singles   # Path for media files (default: /data/media/music/singles)
 
   # SpotDL Specific Configuration

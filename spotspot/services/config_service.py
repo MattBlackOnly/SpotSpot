@@ -69,6 +69,9 @@ class ConfigService:
         self.m3u_playlist_path = os.getenv("M3U_PLAYLIST_PATH", "/data/media/music/playlists")
         logging.info(f"Playlist Path: {self.m3u_playlist_path}")
 
+        self.m3u_playlist_sort_order = os.getenv("M3U_PLAYLIST_SORT_ORDER", "date_desc")
+        logging.info(f"Playlist Sort Order: {self.m3u_playlist_sort_order}")
+
         self.absolute_server_path = os.getenv("ABSOLUTE_SERVER_PATH", "/data/media/music/singles")
         logging.info(f"Absolute Server Path: {self.absolute_server_path}")
 

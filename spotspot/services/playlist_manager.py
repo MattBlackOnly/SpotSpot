@@ -21,11 +21,27 @@ class PlaylistManager:
             m3u_file_path = os.path.join(self.config.m3u_playlist_path, f"{self.config.m3u_playlist_name}.m3u")
             logging.info(f"M3U playlist file: {m3u_file_path}")
 
+            # Get list of files with their modification times
+            files = []
+            for file in os.listdir(folder_path):
+                file_path = os.path.join(folder_path, file)
+                if os.path.isfile(file_path) and any(file.lower().endswith(ext) for ext in self.config.supported_formats):
+                    files.append((file_path, file, os.path.getmtime(file_path)))
+
+            # Apply sorting based on environment variable
+            if self.config.m3u_playlist_sort_order == "name_asc":
+                files.sort(key=lambda x: x[1])
+            elif self.config.m3u_playlist_sort_order == "name_desc":
+                files.sort(key=lambda x: x[1], reverse=True)
+            elif self.config.m3u_playlist_sort_order == "date_asc":
+                files.sort(key=lambda x: x[2])
+            else:
+                files.sort(key=lambda x: x[2], reverse=True)
+
+            # Write sorted files to M3U playlist
             with open(m3u_file_path, "w") as m3u_file:
-                for file in os.listdir(folder_path):
-                    file_path = os.path.join(folder_path, file)
-                    if os.path.isfile(file_path) and any(file.endswith(ext.lower()) for ext in self.config.supported_formats):
-                        m3u_file.write(f"{file_path}\n")
+                for file_path, _, _ in files:
+                    m3u_file.write(f"{file_path}\n")
 
             logging.info(f"M3U playlist generated at: {m3u_file_path}")
 
