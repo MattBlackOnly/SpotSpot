@@ -4,6 +4,6 @@ gevent-websocket==0.10.1
 flask==3.1.2
 flask_socketio==5.6.0
 yt_dlp[default]==2026.03.17
-spotdl==4.4.4
+spotdl==4.5.0
 plexapi==4.18.0
 
