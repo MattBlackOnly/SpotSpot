@@ -13,12 +13,12 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         token: ${{ secrets.PAT }}
 
     - name: Set up Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: '3.12'
 
@@ -88,15 +88,15 @@ jobs:
     env:
       GH_TOKEN: ${{ secrets.PAT }}
 
-    steps:    
+    steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         token: ${{ secrets.PAT }}
 
     - name: Pull latest changes
       run: git pull origin main
-    
+
     - name: Fetch and list tags
       run: |
         git fetch --tags
