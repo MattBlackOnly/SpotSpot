@@ -5,5 +5,5 @@ gevent-websocket
 flask
 flask_socketio
 yt_dlp[default]==2026.10.21
-spotdl==4.5.2
+spotdl==4.6.0
 plexapi
